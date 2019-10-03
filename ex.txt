@@ -1,0 +1,197 @@
+Bài 1: Tìm hiểu cơ chế thread Parallel Streams trong java 8(Default pool, fork and join framework)
+Bài 2: Cho hệ quản trị cơ sở dữ liệu bao gồm những quan hệ như sau:
+public class School {
+	private String schoolName;
+	private String schoolId;
+	private String schoolDesc;
+
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+
+	public String getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(String schoolId) {
+		this.schoolId = schoolId;
+	}
+
+	public String getSchoolDesc() {
+		return schoolDesc;
+	}
+
+	public void setSchoolDesc(String schoolDesc) {
+		this.schoolDesc = schoolDesc;
+	}
+
+}
+
+public class ClassOfSchool {
+	private Integer classId;
+	private String classCode;
+	private String classDesc;
+	private Integer schoolId;
+
+	public Integer getClassId() {
+		return classId;
+	}
+
+	public void setClassId(Integer classId) {
+		this.classId = classId;
+	}
+
+	public String getClassCode() {
+		return classCode;
+	}
+
+	public void setClassCode(String classCode) {
+		this.classCode = classCode;
+	}
+
+	public String getClassDesc() {
+		return classDesc;
+	}
+
+	public void setClassDesc(String classDesc) {
+		this.classDesc = classDesc;
+	}
+
+	public Integer getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(Integer schoolId) {
+		this.schoolId = schoolId;
+	}
+
+}
+
+public class Student {
+	private Integer studentId;
+	private String studentName;
+	private String studentMobile;
+	private Integer classId;
+
+	public Integer getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(Integer studentId) {
+		this.studentId = studentId;
+	}
+
+	public String getStudentName() {
+		return studentName;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+
+	public String getStudentMobile() {
+		return studentMobile;
+	}
+
+	public void setStudentMobile(String studentMobile) {
+		this.studentMobile = studentMobile;
+	}
+
+	public Integer getClassId() {
+		return classId;
+	}
+
+	public void setClassId(Integer classId) {
+		this.classId = classId;
+	}
+
+}
+
+public enum SubjectDomain {
+	MATHEMATICS, LITERATURE, PHYSICS, CHEMISTRY, BIOLOGY, HISTORY, GEOGRAPHY;
+}
+
+public class Subject {
+	private String subjectName;
+	private Integer subjectId;
+	private String subjectDesc;
+	private SubjectDomain domain;
+
+	public String getSubjectName() {
+		return subjectName;
+	}
+
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+
+	public Integer getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(Integer subjectId) {
+		this.subjectId = subjectId;
+	}
+
+	public String getSubjectDesc() {
+		return subjectDesc;
+	}
+
+	public void setSubjectDesc(String subjectDesc) {
+		this.subjectDesc = subjectDesc;
+	}
+
+	public SubjectDomain getDomain() {
+		return domain;
+	}
+
+	public void setDomain(SubjectDomain domain) {
+		this.domain = domain;
+	}
+
+}
+
+public class StudentSubjectRegister {
+	private Integer studentId;
+	private Integer subjectId;
+	private Double score;
+	
+	
+	public Integer getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(Integer subjectId) {
+		this.subjectId = subjectId;
+	}
+
+	public Integer getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(Integer studentId) {
+		this.studentId = studentId;
+	}
+
+	public Double getScore() {
+		return score;
+	}
+
+	public void setScore(Double score) {
+		this.score = score;
+	}
+	
+}
+
+- Yêu cầu: Tự tạo dữ liệu của các bảng và load vào List<School>, List<Class>, List<Student>, List<Subject>, List<StudentSubjectRegister>
+- Sử dụng java 8 để xuất ra các báo cáo liên quan như sau:
+1. Báo cáo tổng số sinh viên trong trường
+2. Tỷ lệ điểm trung bình của môn học trong trường
+3. Lấy ra class có tỷ lệ điểm trung bình cao nhất trong trường
+4. Xuất ra 10 học sinh xuất sắc nhất, kém nhất theo từng môn học
+5. Tìm lớp có tỷ lệ điểm trung bình cao nhất theo từng chủ đề học(SubjectDomain)
+6. Xác định chủ đề học có điểm cao nhất ở trong trường. Có tỷ lệ học sinh đăng ký theo học nhiều nhất
