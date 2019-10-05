@@ -62,7 +62,6 @@ public class App
 			schools.forEach(s -> {
 				int count = finalClasses.stream()
 						.filter(c -> c.getSchoolId() == s.getSchoolId())
-						.collect(Collectors.toList()).stream()
 						.mapToInt(c -> (int) finalStudents.stream()
 								.filter(student -> student.getClassId() == c.getClassId())
 								.count()).sum();
@@ -81,15 +80,12 @@ public class App
 				finalSubjects.forEach(subject -> {
 					double avg = finalClasses.stream()
 							.filter(c -> c.getSchoolId() == school.getSchoolId())
-							.collect(Collectors.toList())
-							.parallelStream().mapToDouble(c -> finalStudents.stream()
+							.mapToDouble(c -> finalStudents.stream()
 									.filter(student -> student.getClassId() == c.getClassId())
-									.collect(Collectors.toList())
-									.stream().mapToDouble(student -> finalSubjectRegisters.stream()
+									.mapToDouble(student -> finalSubjectRegisters.stream()
 											.filter(subjectRegister -> subjectRegister.getStudentId() == student.getStudentId() &&
 													subjectRegister.getSubjectId() == subject.getSubjectId())
-											.collect(Collectors.toList())
-											.stream().mapToDouble(StudentSubjectRegister::getScore)
+											.mapToDouble(StudentSubjectRegister::getScore)
 											.filter(value -> value != 0)
 											.summaryStatistics().getAverage())
 									.filter(value -> value != 0)
@@ -118,10 +114,9 @@ public class App
 						.stream().mapToDouble(clazz -> {
 									double avg = finalStudents.stream()
 											.filter(student -> student.getClassId() == clazz.getClassId())
-											.collect(Collectors.toList()).stream()
 											.mapToDouble(student -> finalSubjectRegisters.stream()
 													.filter(subjectRegister -> subjectRegister.getStudentId() == student.getStudentId())
-													.collect(Collectors.toList()).stream().mapToDouble(StudentSubjectRegister::getScore)
+													.mapToDouble(StudentSubjectRegister::getScore)
 													.summaryStatistics().getAverage())
 											.summaryStatistics().getAverage();
 									avg = (double) Math.round(avg * 100) / 100;
@@ -172,14 +167,11 @@ public class App
 				double max = finalClasses.stream().mapToDouble(c -> {
 					double avg = finalStudents.stream()
 							.filter(student -> student.getClassId() == c.getClassId())
-							.collect(Collectors.toList()).stream()
 							.mapToDouble(student -> finalSubjects.stream()
 									.filter(subject -> subject.getDomain() == domain)
-									.collect(Collectors.toList()).stream()
 									.mapToDouble(subject -> finalSubjectRegisters.stream()
 											.filter(subjectRegister -> subjectRegister.getSubjectId() == subject.getSubjectId() &&
 													subjectRegister.getStudentId() == student.getStudentId())
-											.collect(Collectors.toList()).stream()
 											.mapToDouble(StudentSubjectRegister::getScore)
 											.filter(value -> value != 0)
 											.summaryStatistics().getAverage())
@@ -203,25 +195,26 @@ public class App
 				System.out.println(space2);
 				System.out.println(school);
 				domains.forEach(domain -> {
-					double max = finalClasses.stream()
+					List<StudentSubjectRegister> registerList = finalClasses.stream()
 							.filter(c -> c.getSchoolId() == school.getSchoolId())
-							.collect(Collectors.toList()).stream()
-							.mapToDouble(c -> finalStudents.stream()
+							.map(c -> finalStudents.stream()
 									.filter(student -> student.getClassId() == c.getClassId())
-									.collect(Collectors.toList()).stream()
-									.mapToDouble(student -> finalSubjects.stream()
+									.map(student -> finalSubjects.stream()
 											.filter(subject -> subject.getDomain() == domain)
-											.collect(Collectors.toList()).stream()
-											.mapToDouble(subject -> finalSubjectRegisters.stream()
+											.map(subject -> finalSubjectRegisters.stream()
 													.filter(subjectRegister -> subject.getSubjectId() == subjectRegister.getSubjectId() &&
 															subjectRegister.getStudentId() == student.getStudentId())
-													.collect(Collectors.toList()).stream()
-													.mapToDouble(StudentSubjectRegister::getScore)
-													.summaryStatistics().getAverage())
-											.max().orElse(-1))
-									.max().orElse(-1))
-							.max().orElse(-1);
+													.collect(Collectors.toList()))
+											.collect(Collectors.toList()).get(0))
+									.collect(Collectors.toList()).get(0))
+							.collect(Collectors.toList()).get(0);
+					double max = registerList.stream().mapToDouble(StudentSubjectRegister::getScore)
+							.max().orElse(0);
+					double count =
+							registerList.stream().mapToDouble(StudentSubjectRegister::getScore)
+									.count();
 					System.out.println(domain + " - Max score = " + max);
+					System.out.println(domain + " - Max student = " + count);
 				});
 			});
 		}
